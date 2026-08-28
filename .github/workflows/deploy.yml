@@ -1,16 +1,17 @@
 # Builds the site and publishes it to GitHub Pages.
 #
-# MANUAL ONLY. This workflow has no push trigger on purpose: publishing is an
-# authorisation-gated action for this project, so no push or merge may
-# republish the public site as a side effect. It runs only when a human starts
-# it from the Actions tab (or via the API).
+# Production deployment is automatic from `main`: every push or merge to
+# `main` builds, checks and republishes the site. Feature branches do not
+# deploy. Manual dispatch remains available as a fallback.
 #
-# Production launch has not been approved. Adding a `push` trigger — for `main`
-# or any other branch — is itself a deployment decision and needs explicit
-# authorisation first. See CLAUDE.md, "Actions requiring explicit authorisation".
+# This automatic `main` deployment was explicitly authorised by the project
+# owner on 2026-08-28. See CLAUDE.md, "Actions requiring explicit authorisation".
 name: Deploy to GitHub Pages
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:

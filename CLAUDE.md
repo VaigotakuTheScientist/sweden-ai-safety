@@ -37,13 +37,13 @@ satisfy a gated action by building something that performs it later, and never w
 automation's reach as a side effect of unrelated work. If a change would make a gated action
 possible without a human deciding again, it needs authorisation first.
 
-6. **Do not deploy, publish or change how the site is hosted.** GitHub Pages is enabled and
-   a preview is currently published, but `.github/workflows/deploy.yml` is
-   `workflow_dispatch` only: it runs when a human starts it, and no push or merge
-   republishes the site. Production launch has not been approved. Adding a `push` trigger
-   (including for `main`), re-pointing the Pages source, or otherwise arranging automatic
-   publication is a deployment decision and needs explicit authorisation.
-7. Do not merge pull requests, and do not enable auto-merge or any automation that merges.
+6. **Automatic deployment from `main` is authorised.** GitHub Pages is enabled and
+   `.github/workflows/deploy.yml` may deploy automatically on pushes/merges to `main`, with
+   `workflow_dispatch` retained as a manual fallback. Feature branches must not deploy.
+   Changing the hosting provider, Pages source, deployment branch, domain, or widening
+   automatic deployment beyond `main` still requires explicit authorisation.
+7. Do not merge pull requests, and do not enable auto-merge or any automation that merges,
+   unless the task prompt explicitly authorises that merge.
 8. Do not spend money, buy domains or services, or make any external commitment.
 9. Do not contact people or organisations, send email, submit forms or grant applications,
    create social media accounts, or publish announcements — directly or on a schedule.
@@ -58,7 +58,7 @@ possible without a human deciding again, it needs authorisation first.
 ## How to work
 
 12. **Prefer small, reviewable iterations.** Feature branches, focused diffs, draft pull
-    requests. Do not implement directly on `main` or on any deployment branch.
+    requests. Do not implement directly on `main` unless the task explicitly authorises it.
 13. **Keep content in `src/data/` and types in `src/types/`**, separate from components, so
     the site stays straightforward to update programmatically later.
 14. **Keep the stack deliberately simple:** Astro, TypeScript, plain CSS. No CMS, backend,
