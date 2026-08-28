@@ -1,10 +1,11 @@
 ---
 import { primaryNav, site } from '../data/site';
+import { withBase } from '../lib/paths';
 ---
 
 <header class="site-header">
   <div class="page-shell site-header__inner">
-    <a class="wordmark" href="/">
+    <a class="wordmark" href={withBase('/')}>
       <span class="wordmark__mark" aria-hidden="true"></span>
       <span class="wordmark__text">{site.wordmark}</span>
     </a>
@@ -16,7 +17,7 @@ import { primaryNav, site } from '../data/site';
             <li>
               <a
                 class:list={['site-nav__link', { 'site-nav__link--cta': item.emphasis }]}
-                href={item.href}
+                href={withBase(item.href)}
               >
                 {item.label}
               </a>

@@ -1,5 +1,6 @@
 ---
 import { contactChannels, footerNav, site } from '../data/site';
+import { withBase } from '../lib/paths';
 
 const year = new Date().getFullYear();
 ---
@@ -19,7 +20,7 @@ const year = new Date().getFullYear();
         {
           footerNav.map((item) => (
             <li>
-              <a href={item.href}>{item.label}</a>
+              <a href={withBase(item.href)}>{item.label}</a>
             </li>
           ))
         }

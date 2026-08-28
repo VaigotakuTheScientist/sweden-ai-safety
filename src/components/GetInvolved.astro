@@ -1,5 +1,6 @@
 ---
 import { involvementRoutes } from '../data/activities';
+import { withBase } from '../lib/paths';
 ---
 
 <section class="section get-involved" id="get-involved">
@@ -11,7 +12,7 @@ import { involvementRoutes } from '../data/activities';
         Whether you are new to the field or already working in it, there is usually a next
         step that fits.
       </p>
-      <a class="button button--primary get-involved__cta" href="/get-involved">
+      <a class="button button--primary get-involved__cta" href={withBase('/get-involved')}>
         Get involved
       </a>
     </div>

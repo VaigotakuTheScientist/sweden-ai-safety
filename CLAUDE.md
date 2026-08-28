@@ -29,7 +29,10 @@ task unless the task prompt explicitly overrides them.
 
 ## Actions requiring explicit authorisation
 
-6. Do not deploy, publish or enable hosting (including GitHub Pages).
+6. Do not deploy, publish or change how the site is hosted. GitHub Pages **is** enabled:
+   `.github/workflows/deploy.yml` publishes the site on every push to `main` (and,
+   temporarily, to `feature/homepage-v0.1`). Treat a push to a deploying branch as a
+   publish, and get authorisation first.
 7. Do not merge pull requests.
 8. Do not spend money, buy domains or services, or make any external commitment.
 9. Do not contact people or organisations, send email, submit forms or grant applications,

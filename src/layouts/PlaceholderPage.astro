@@ -1,6 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import { site } from '../data/site';
+import { withBase } from '../lib/paths';
 
 /**
  * Minimal holding page for a navigation destination that has not been written
@@ -30,7 +31,7 @@ const {
       <h1 class="placeholder__heading">{title}</h1>
       <p class="placeholder__intro">{intro}</p>
       {note && <p class="placeholder__note">{note}</p>}
-      <a class="link-arrow placeholder__back" href="/">
+      <a class="link-arrow placeholder__back" href={withBase('/')}>
         <span class="link-arrow__glyph" aria-hidden="true">←</span> Back to the homepage
       </a>
       <slot />

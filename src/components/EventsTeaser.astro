@@ -1,5 +1,6 @@
 ---
 import { getUpcomingEvents } from '../data/events';
+import { withBase } from '../lib/paths';
 
 /**
  * Events across the network.
@@ -29,7 +30,7 @@ const hasTime = (value: string) => value.includes('T');
         <p class="section-eyebrow">Events</p>
         <h2 class="section-heading">Across the network</h2>
       </div>
-      <a class="link-arrow events__all" href="/events">
+      <a class="link-arrow events__all" href={withBase('/events')}>
         View all events <span class="link-arrow__glyph" aria-hidden="true">→</span>
       </a>
     </div>
