@@ -29,14 +29,24 @@ task unless the task prompt explicitly overrides them.
 
 ## Actions requiring explicit authorisation
 
-6. Do not deploy, publish or change how the site is hosted. GitHub Pages **is** enabled:
-   `.github/workflows/deploy.yml` publishes the site on every push to `main` (and,
-   temporarily, to `feature/homepage-v0.1`). Treat a push to a deploying branch as a
-   publish, and get authorisation first.
-7. Do not merge pull requests.
+**These gates cover indirect actions as well as direct ones.** Authorisation is required
+both to perform a gated action and to make a change that causes it to happen automatically
+— creating or modifying CI/CD workflows, branch or event triggers, scheduled jobs, Pages or
+hosting configuration, bots, webhooks, or any other automation that acts externally. Never
+satisfy a gated action by building something that performs it later, and never widen an
+automation's reach as a side effect of unrelated work. If a change would make a gated action
+possible without a human deciding again, it needs authorisation first.
+
+6. **Do not deploy, publish or change how the site is hosted.** GitHub Pages is enabled and
+   a preview is currently published, but `.github/workflows/deploy.yml` is
+   `workflow_dispatch` only: it runs when a human starts it, and no push or merge
+   republishes the site. Production launch has not been approved. Adding a `push` trigger
+   (including for `main`), re-pointing the Pages source, or otherwise arranging automatic
+   publication is a deployment decision and needs explicit authorisation.
+7. Do not merge pull requests, and do not enable auto-merge or any automation that merges.
 8. Do not spend money, buy domains or services, or make any external commitment.
 9. Do not contact people or organisations, send email, submit forms or grant applications,
-   create social media accounts, or publish announcements.
+   create social media accounts, or publish announcements — directly or on a schedule.
 10. Do not modify the separate `Malmo-Lund-AI-Safety` repository.
 
 ## Separation of concerns

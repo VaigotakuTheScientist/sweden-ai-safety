@@ -1,19 +1,16 @@
 # Builds the site and publishes it to GitHub Pages.
 #
-# The first successful run also *enables* Pages for this repository
-# (`configure-pages` with `enablement: true`), so no manual setting is needed.
+# MANUAL ONLY. This workflow has no push trigger on purpose: publishing is an
+# authorisation-gated action for this project, so no push or merge may
+# republish the public site as a side effect. It runs only when a human starts
+# it from the Actions tab (or via the API).
 #
-# TEMPORARY: this also runs on `feature/homepage-v0.1` so the site can be
-# reviewed live before that pull request is merged. Remove that branch from the
-# trigger once it is merged — otherwise an unmerged branch keeps overwriting
-# the published site.
+# Production launch has not been approved. Adding a `push` trigger — for `main`
+# or any other branch — is itself a deployment decision and needs explicit
+# authorisation first. See CLAUDE.md, "Actions requiring explicit authorisation".
 name: Deploy to GitHub Pages
 
 on:
-  push:
-    branches:
-      - main
-      - feature/homepage-v0.1
   workflow_dispatch:
 
 permissions:
