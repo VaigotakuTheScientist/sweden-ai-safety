@@ -1,15 +1,26 @@
 import type { EventEntry } from '../types/content';
 
 /**
- * Events shown on the site.
+ * Confirmed upcoming events shown on the site.
  *
- * IMPORTANT: `events` is the list rendered to visitors. It is empty because no
- * national events calendar has been confirmed yet, and showing invented events
- * would mislead people. When real events exist, add them here (or replace this
- * module with a feed/aggregation step returning the same shape) and the events
- * section will render them without further component changes.
+ * Keep this list factual and small. Add an event only when its public listing
+ * confirms the key details; if no events are confirmed, leave the list empty.
+ * A future feed/aggregation step can replace this module while preserving the
+ * same EventEntry shape.
  */
-export const events: readonly EventEntry[] = [];
+export const events: readonly EventEntry[] = [
+  {
+    id: 'stockholm-ais-went-rogue-2026-09-02',
+    title: '[Reading Group] AIs Went Rogue, Now What?',
+    start: '2026-09-02T18:00:00+02:00',
+    city: 'Stockholm',
+    venue: 'EA Sweden, Sveavägen 76',
+    organiser: 'stockholm',
+    format: 'in-person',
+    registrationUrl: 'https://www.meetup.com/stockholm-ai-safety/',
+    tags: ['reading group', 'AI safety'],
+  },
+];
 
 /**
  * SAMPLE DATA — NOT RENDERED ANYWHERE ON THE PUBLIC SITE.
@@ -34,7 +45,7 @@ export const sampleEventsForReference: readonly EventEntry[] = [
   },
 ];
 
-/** Upcoming events, soonest first. Returns an empty list while none are confirmed. */
+/** Upcoming events, soonest first. */
 export function getUpcomingEvents(now: Date = new Date()): readonly EventEntry[] {
   return [...events]
     .filter((event) => new Date(event.end ?? event.start).getTime() >= now.getTime())
