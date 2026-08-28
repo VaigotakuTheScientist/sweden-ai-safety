@@ -1,0 +1,82 @@
+---
+import { involvementRoutes } from '../data/activities';
+---
+
+<section class="section get-involved" id="get-involved">
+  <div class="page-shell get-involved__inner">
+    <div class="get-involved__intro">
+      <p class="section-eyebrow">Get involved</p>
+      <h2 class="section-heading">There are many ways to contribute.</h2>
+      <p class="section-lede">
+        Whether you are new to the field or already working in it, there is usually a next
+        step that fits.
+      </p>
+      <a class="button button--primary get-involved__cta" href="/get-involved">
+        Get involved
+      </a>
+    </div>
+
+    <ul class="get-involved__routes">
+      {
+        involvementRoutes.map((route) => (
+          <li class="route">
+            <h3 class="route__title">{route.title}</h3>
+            <p class="route__text">{route.description}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .get-involved {
+    background: var(--colour-paper-sunken);
+    border-top: 1px solid var(--colour-rule);
+  }
+
+  .get-involved__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(var(--space-xl), 5vw, var(--space-3xl));
+    align-items: start;
+  }
+
+  .get-involved__cta {
+    margin-top: var(--space-xl);
+  }
+
+  .get-involved__routes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0;
+  }
+
+  .route {
+    padding-block: var(--space-md);
+    border-top: 1px solid var(--colour-rule-strong);
+  }
+
+  .route:last-child {
+    border-bottom: 1px solid var(--colour-rule-strong);
+  }
+
+  .route__title {
+    font-size: var(--text-lg);
+    font-weight: 600;
+  }
+
+  .route__text {
+    margin-top: var(--space-2xs);
+    font-size: var(--text-sm);
+    color: var(--colour-ink-soft);
+  }
+
+  @media (max-width: 60rem) {
+    .get-involved__inner {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

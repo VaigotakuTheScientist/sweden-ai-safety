@@ -1,0 +1,167 @@
+---
+import { getUpcomingEvents } from '../data/events';
+
+/**
+ * Events across the network.
+ *
+ * While `getUpcomingEvents()` is empty the section shows an honest empty
+ * state. Sample entries in `src/data/events.ts` exist only to document the
+ * data shape and are never rendered here — a visitor must never mistake a
+ * placeholder for a real event.
+ */
+const upcoming = getUpcomingEvents();
+const dateFormatter = new Intl.DateTimeFormat('en-GB', {
+  weekday: 'short',
+  day: 'numeric',
+  month: 'short',
+});
+const timeFormatter = new Intl.DateTimeFormat('en-GB', {
+  hour: '2-digit',
+  minute: '2-digit',
+});
+const hasTime = (value: string) => value.includes('T');
+---
+
+<section class="section events" id="events">
+  <div class="page-shell">
+    <div class="events__head">
+      <div>
+        <p class="section-eyebrow">Events</p>
+        <h2 class="section-heading">Across the network</h2>
+      </div>
+      <a class="link-arrow events__all" href="/events">
+        View all events <span class="link-arrow__glyph" aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    {
+      upcoming.length > 0 ? (
+        <ul class="events__list">
+          {upcoming.map((event) => (
+            <li class="event-row">
+              <p class="event-row__date">
+                <time datetime={event.start}>
+                  {dateFormatter.format(new Date(event.start))}
+                </time>
+                {hasTime(event.start) && (
+                  <span class="event-row__time">
+                    {timeFormatter.format(new Date(event.start))}
+                  </span>
+                )}
+              </p>
+              <div class="event-row__body">
+                <h3 class="event-row__title">{event.title}</h3>
+                <p class="event-row__meta">
+                  {[event.city, event.venue].filter(Boolean).join(' · ')}
+                </p>
+              </div>
+              {event.registrationUrl && (
+                <a class="link-arrow event-row__cta" href={event.registrationUrl}>
+                  Register <span class="link-arrow__glyph" aria-hidden="true">→</span>
+                </a>
+              )}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div class="events__empty">
+          <p class="events__empty-title">National events calendar coming soon</p>
+          <p class="events__empty-text">
+            Local communities currently announce their own talks, reading groups and
+            workshops. A shared calendar across the network is one of the first things this
+            site will carry.
+          </p>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .events__head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--space-lg);
+    flex-wrap: wrap;
+  }
+
+  .events__list {
+    margin-top: var(--space-2xl);
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0;
+  }
+
+  .event-row {
+    display: grid;
+    grid-template-columns: 9rem minmax(0, 1fr) auto;
+    gap: var(--space-lg);
+    align-items: baseline;
+    padding-block: var(--space-lg);
+    border-top: 1px solid var(--colour-rule);
+  }
+
+  .event-row:last-child {
+    border-bottom: 1px solid var(--colour-rule);
+  }
+
+  .event-row__date {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--colour-ink);
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .event-row__time {
+    color: var(--colour-ink-muted);
+    font-size: var(--text-xs);
+  }
+
+  .event-row__title {
+    font-size: var(--text-lg);
+  }
+
+  .event-row__meta {
+    margin-top: var(--space-2xs);
+    font-size: var(--text-sm);
+    color: var(--colour-ink-muted);
+  }
+
+  .events__empty {
+    margin-top: var(--space-2xl);
+    padding: clamp(var(--space-xl), 4vw, var(--space-2xl));
+    border: 1px solid var(--colour-rule);
+    border-left: 3px solid var(--colour-yellow);
+    border-radius: var(--radius-md);
+    background: var(--colour-paper-raised);
+  }
+
+  .events__empty-title {
+    font-size: var(--text-xl);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .events__empty-text {
+    margin-top: var(--space-sm);
+    color: var(--colour-ink-soft);
+    max-width: 54ch;
+  }
+
+  @media (max-width: 46rem) {
+    .event-row {
+      grid-template-columns: 1fr;
+      gap: var(--space-xs);
+    }
+
+    .event-row__date {
+      flex-direction: row;
+      gap: var(--space-sm);
+      align-items: baseline;
+    }
+  }
+</style>

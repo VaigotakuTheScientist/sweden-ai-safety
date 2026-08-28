@@ -1,0 +1,21 @@
+{
+  "name": "sweden-ai-safety-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Website for Sweden AI Safety — a network of AI safety communities across Sweden.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^5.14.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "typescript": "^5.9.2"
+  }
+}

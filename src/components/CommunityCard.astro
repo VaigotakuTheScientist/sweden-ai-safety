@@ -1,0 +1,85 @@
+---
+import type { Community } from '../types/content';
+import { statusLabels } from '../data/communities';
+
+interface Props {
+  community: Community;
+}
+
+const { community } = Astro.props;
+// Only cities with a confirmed public page become links. Everything else
+// renders as a plain card, so nothing on the site implies a destination,
+// organiser or activity level that does not exist yet.
+const hasPage = Boolean(community.url);
+const Tag = hasPage ? 'a' : 'article';
+---
+
+<Tag
+  class:list={['community-card', { 'community-card--linked': hasPage }]}
+  id={community.id}
+  {...hasPage ? { href: community.url } : {}}
+>
+  <p class="community-card__region">{community.region}</p>
+  <h3 class="community-card__city">{community.city}</h3>
+  {community.blurb && <p class="community-card__blurb">{community.blurb}</p>}
+  {
+    hasPage ? (
+      <span class="link-arrow community-card__cta">
+        Explore community <span class="link-arrow__glyph" aria-hidden="true">→</span>
+      </span>
+    ) : (
+      <p class="community-card__status">{statusLabels[community.status]}</p>
+    )
+  }
+</Tag>
+
+<style>
+  .community-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+    padding: var(--space-lg);
+    background: var(--colour-paper-raised);
+    border: 1px solid var(--colour-rule);
+    border-radius: var(--radius-md);
+    min-height: 9.5rem;
+    text-decoration: none;
+    scroll-margin-top: 5rem;
+  }
+
+  .community-card--linked {
+    transition: border-color 140ms ease, transform 140ms ease;
+  }
+
+  .community-card--linked:hover {
+    border-color: var(--colour-blue);
+    transform: translateY(-2px);
+  }
+
+  .community-card__region {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.06em;
+    color: var(--colour-ink-muted);
+  }
+
+  .community-card__city {
+    font-size: var(--text-xl);
+  }
+
+  .community-card__blurb {
+    font-size: var(--text-sm);
+    color: var(--colour-ink-soft);
+  }
+
+  .community-card__cta,
+  .community-card__status {
+    margin-top: auto;
+    padding-top: var(--space-md);
+  }
+
+  .community-card__status {
+    font-size: var(--text-sm);
+    color: var(--colour-ink-muted);
+  }
+</style>

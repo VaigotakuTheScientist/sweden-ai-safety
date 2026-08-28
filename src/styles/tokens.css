@@ -1,0 +1,58 @@
+/*
+ * Sweden AI Safety — design tokens.
+ *
+ * Visual strategy: broad-disciplinary appeal with institutional credibility
+ * and a quiet technical signal. Scandinavian editorial layout — paper-toned
+ * neutrals, generous whitespace, one restrained blue and one sparing yellow
+ * derived from the Swedish flag, monospace only for small technical labels.
+ */
+:root {
+  /* Neutrals — warm paper rather than pure white. */
+  --colour-paper: #fcfbf9;
+  --colour-paper-raised: #ffffff;
+  --colour-paper-sunken: #f4f2ed;
+  --colour-ink: #131820;
+  --colour-ink-soft: #3b444f;
+  --colour-ink-muted: #616a76;
+  --colour-rule: #e3ded5;
+  --colour-rule-strong: #cec7ba;
+
+  /* Accents — deliberate, never decorative fills. */
+  --colour-blue: #14507d;
+  --colour-blue-deep: #0d3c60;
+  --colour-blue-wash: #eef3f8;
+  --colour-yellow: #e0a92a;
+  --colour-yellow-wash: #f9f0d8;
+
+  /* Typography */
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, 'Noto Sans', sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
+    'Liberation Mono', monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: clamp(1.0625rem, 0.99rem + 0.35vw, 1.1875rem);
+  --text-xl: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+  --text-2xl: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+  --text-3xl: clamp(1.875rem, 1.5rem + 1.8vw, 2.75rem);
+  --text-4xl: clamp(2.375rem, 1.6rem + 3.6vw, 4.25rem);
+
+  /* Spacing */
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: clamp(3.5rem, 2rem + 6vw, 6rem);
+
+  /* Layout */
+  --measure: 62ch;
+  --page-max: 74rem;
+  --page-gutter: clamp(1.25rem, 5vw, 3.5rem);
+  --radius-sm: 3px;
+  --radius-md: 6px;
+}
