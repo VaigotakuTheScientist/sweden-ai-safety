@@ -1,0 +1,70 @@
+# Builds the site and publishes it to GitHub Pages.
+#
+# The first successful run also *enables* Pages for this repository
+# (`configure-pages` with `enablement: true`), so no manual setting is needed.
+#
+# TEMPORARY: this also runs on `feature/homepage-v0.1` so the site can be
+# reviewed live before that pull request is merged. Remove that branch from the
+# trigger once it is merged — otherwise an unmerged branch keeps overwriting
+# the published site.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - feature/homepage-v0.1
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Let a running deployment finish rather than cancelling it mid-publish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Type-check
+        run: npm run check
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload build output
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
