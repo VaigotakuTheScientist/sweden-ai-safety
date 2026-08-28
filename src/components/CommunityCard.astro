@@ -1,26 +1,29 @@
 ---
 import type { Community } from '../types/content';
-import { statusLabels } from '../data/communities';
 
 interface Props {
   community: Community;
 }
 
 const { community } = Astro.props;
-// Only cities with a confirmed public page become links. Everything else
-// renders as a plain card, so nothing on the site implies a destination,
-// organiser or activity level that does not exist yet.
+
+// A card only becomes a link once its data carries a confirmed URL. Until then
+// it stays a plain article, so nothing implies a destination, an organiser or
+// an activity level that has not been agreed.
 const hasPage = Boolean(community.url);
 const Tag = hasPage ? 'a' : 'article';
+const isExternal = community.url?.startsWith('http') ?? false;
 ---
 
 <Tag
   class:list={['community-card', { 'community-card--linked': hasPage }]}
   id={community.id}
   {...hasPage ? { href: community.url } : {}}
+  {...isExternal ? { rel: 'noopener' } : {}}
 >
   <p class="community-card__region">{community.region}</p>
-  <h3 class="community-card__city">{community.city}</h3>
+  <h3 class="community-card__name">{community.name ?? community.city}</h3>
+  {community.name && <p class="community-card__city">{community.city}</p>}
   {community.blurb && <p class="community-card__blurb">{community.blurb}</p>}
   {
     hasPage ? (
@@ -28,7 +31,7 @@ const Tag = hasPage ? 'a' : 'article';
         Explore community <span class="link-arrow__glyph" aria-hidden="true">→</span>
       </span>
     ) : (
-      <p class="community-card__status">{statusLabels[community.status]}</p>
+      <p class="community-card__pending">Details coming soon</p>
     )
   }
 </Tag>
@@ -42,7 +45,8 @@ const Tag = hasPage ? 'a' : 'article';
     background: var(--colour-paper-raised);
     border: 1px solid var(--colour-rule);
     border-radius: var(--radius-md);
-    min-height: 9.5rem;
+    min-height: 8rem;
+    height: 100%;
     text-decoration: none;
     scroll-margin-top: 5rem;
   }
@@ -63,8 +67,14 @@ const Tag = hasPage ? 'a' : 'article';
     color: var(--colour-ink-muted);
   }
 
-  .community-card__city {
+  .community-card__name {
     font-size: var(--text-xl);
+    text-wrap: balance;
+  }
+
+  .community-card__city {
+    font-size: var(--text-sm);
+    color: var(--colour-ink-soft);
   }
 
   .community-card__blurb {
@@ -72,14 +82,19 @@ const Tag = hasPage ? 'a' : 'article';
     color: var(--colour-ink-soft);
   }
 
-  .community-card__cta,
-  .community-card__status {
+  .community-card__cta {
     margin-top: auto;
     padding-top: var(--space-md);
   }
 
-  .community-card__status {
-    font-size: var(--text-sm);
+  /* Held deliberately quiet, and kept next to the heading rather than pushed
+     to the foot of the card, so an empty card stays compact. */
+  .community-card__pending {
+    margin-top: var(--space-xs);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
     color: var(--colour-ink-muted);
+    opacity: 0.75;
   }
 </style>

@@ -34,6 +34,12 @@ export interface CommunityLink {
 export interface Community {
   /** Stable slug, used for anchors, map nodes and future routes. */
   readonly id: string;
+  /**
+   * The local group's own name, once one is confirmed with its organisers.
+   * When set it becomes the card's headline and the city drops to a subtitle;
+   * until then the card is headed by the city alone.
+   */
+  readonly name?: string;
   /** City name as it should be displayed (Swedish spelling). */
   readonly city: string;
   /** Län / region the city sits in. */

@@ -3,21 +3,22 @@ import type { Activity, InvolvementRoute } from '../types/content';
 /** The three deliberately modest things the network does today. */
 export const activities: readonly Activity[] = [
   {
-    id: 'community',
-    title: 'Community',
-    description: 'Connect people interested in AI safety across Sweden.',
+    id: 'connect',
+    title: 'Connect',
+    description:
+      'Find people and communities working on AI safety across Sweden.',
   },
   {
     id: 'learn',
     title: 'Learn',
     description:
-      'Help people build useful understanding of technical AI safety, governance, and related areas.',
+      'Build useful understanding of technical AI safety, governance, and related areas.',
   },
   {
     id: 'coordinate',
     title: 'Coordinate',
     description:
-      'Share events, resources, knowledge, and infrastructure across local communities.',
+      'Share events, resources, knowledge, opportunities, and infrastructure across local communities.',
   },
 ];
 

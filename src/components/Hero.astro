@@ -1,23 +1,32 @@
 ---
+import HeroMotif from './HeroMotif.astro';
+
 /**
  * Above-the-fold statement. Keep it to one headline, one supporting sentence
  * and two calls to action — a visitor should understand what this is in a few
  * seconds without reading an explanation of AI safety.
+ *
+ * On desktop the copy takes a wide left column and the network lattice fills
+ * the right, so the composition is deliberate rather than merely left-aligned.
  */
 ---
 
 <section class="hero">
   <div class="page-shell hero__inner">
-    <p class="hero__eyebrow">Sweden · AI safety community network</p>
-    <h1 class="hero__headline">Building Sweden's AI safety community.</h1>
-    <p class="hero__lede">
-      A network of people and local communities working to understand and reduce risks from
-      advanced AI.
-    </p>
-    <div class="hero__actions">
-      <a class="button button--primary" href="#communities">Find your community</a>
-      <a class="button button--secondary" href="#events">Upcoming events</a>
+    <div class="hero__copy">
+      <p class="hero__eyebrow">Sweden · AI safety community network</p>
+      <h1 class="hero__headline">Building Sweden's AI safety community.</h1>
+      <p class="hero__lede">
+        A network of people and local communities working to understand and reduce risks from
+        advanced AI.
+      </p>
+      <div class="hero__actions">
+        <a class="button button--primary" href="#communities">Find your community</a>
+        <a class="button button--secondary" href="#events">Upcoming events</a>
+      </div>
     </div>
+
+    <HeroMotif />
   </div>
   <div class="hero__rule" aria-hidden="true"></div>
 </section>
@@ -25,7 +34,9 @@
 <style>
   .hero__inner {
     padding-block: clamp(3rem, 2rem + 7vw, 7rem) clamp(2.5rem, 1.5rem + 5vw, 5rem);
-    max-width: calc(var(--page-max));
+    display: grid;
+    gap: var(--space-2xl);
+    align-items: center;
   }
 
   .hero__eyebrow {
@@ -40,7 +51,7 @@
     margin-top: var(--space-lg);
     font-size: var(--text-4xl);
     letter-spacing: -0.03em;
-    max-width: 16ch;
+    max-width: 22ch;
   }
 
   .hero__lede {
@@ -67,5 +78,11 @@
       var(--colour-yellow) 22% 30%,
       var(--colour-rule) 30% 100%
     );
+  }
+
+  @media (min-width: 60rem) {
+    .hero__inner {
+      grid-template-columns: minmax(0, 66fr) minmax(0, 34fr);
+    }
   }
 </style>

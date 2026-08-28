@@ -11,14 +11,20 @@ import { withBase } from '../lib/paths';
  * placeholder for a real event.
  */
 const upcoming = getUpcomingEvents();
+// Events carry their own UTC offset, but the page is built on a machine that
+// may be in any zone — without an explicit time zone an 18:00 Swedish event
+// renders in the builder's local time. Sweden is a single zone, so pin it.
+const TIME_ZONE = 'Europe/Stockholm';
 const dateFormatter = new Intl.DateTimeFormat('en-GB', {
   weekday: 'short',
   day: 'numeric',
   month: 'short',
+  timeZone: TIME_ZONE,
 });
 const timeFormatter = new Intl.DateTimeFormat('en-GB', {
   hour: '2-digit',
   minute: '2-digit',
+  timeZone: TIME_ZONE,
 });
 const hasTime = (value: string) => value.includes('T');
 ---
@@ -30,9 +36,13 @@ const hasTime = (value: string) => value.includes('T');
         <p class="section-eyebrow">Events</p>
         <h2 class="section-heading">Across the network</h2>
       </div>
-      <a class="link-arrow events__all" href={withBase('/events')}>
-        View all events <span class="link-arrow__glyph" aria-hidden="true">→</span>
-      </a>
+      {
+        upcoming.length > 0 && (
+          <a class="link-arrow events__all" href={withBase('/events')}>
+            View all events <span class="link-arrow__glyph" aria-hidden="true">→</span>
+          </a>
+        )
+      }
     </div>
 
     {
@@ -65,14 +75,10 @@ const hasTime = (value: string) => value.includes('T');
           ))}
         </ul>
       ) : (
-        <div class="events__empty">
-          <p class="events__empty-title">National events calendar coming soon</p>
-          <p class="events__empty-text">
-            Local communities currently announce their own talks, reading groups and
-            workshops. A shared calendar across the network is one of the first things this
-            site will carry.
-          </p>
-        </div>
+        <p class="events__empty">
+          Nothing confirmed yet. Local communities announce their own talks, reading groups
+          and workshops; a shared calendar opens here as the first dates are set.
+        </p>
       )
     }
   </div>
@@ -132,25 +138,15 @@ const hasTime = (value: string) => value.includes('T');
     color: var(--colour-ink-muted);
   }
 
+  /* Deliberately quiet: an empty calendar is an absence, not an announcement.
+     The same section renders `.events__list` once real dates exist. */
   .events__empty {
-    margin-top: var(--space-2xl);
-    padding: clamp(var(--space-xl), 4vw, var(--space-2xl));
-    border: 1px solid var(--colour-rule);
-    border-left: 3px solid var(--colour-yellow);
-    border-radius: var(--radius-md);
-    background: var(--colour-paper-raised);
-  }
-
-  .events__empty-title {
-    font-size: var(--text-xl);
-    font-weight: 600;
-    letter-spacing: -0.015em;
-  }
-
-  .events__empty-text {
-    margin-top: var(--space-sm);
-    color: var(--colour-ink-soft);
-    max-width: 54ch;
+    margin-top: var(--space-xl);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--colour-rule);
+    font-size: var(--text-sm);
+    color: var(--colour-ink-muted);
+    max-width: 58ch;
   }
 
   @media (max-width: 46rem) {

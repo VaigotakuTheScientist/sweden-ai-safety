@@ -11,9 +11,15 @@ import { communities } from '../data/communities';
     <p class="section-lede">Find people working on AI safety near you.</p>
 
     <div class="communities__body">
-      <NetworkMap />
+      <figure class="communities__map">
+        <p class="communities__map-label">The network</p>
+        <NetworkMap />
+        <figcaption class="communities__map-caption">
+          One national network. Local communities.
+        </figcaption>
+      </figure>
 
-      <div class="communities__grid-wrap">
+      <div class="communities__content">
         <ul class="communities__grid">
           {
             communities.map((community) => (
@@ -25,7 +31,7 @@ import { communities } from '../data/communities';
           <li>
             <article class="community-card community-card--invite">
               <p class="community-card__region">Elsewhere in Sweden</p>
-              <h3 class="community-card__city">Your city</h3>
+              <h3 class="community-card__name">Your city</h3>
               <p class="community-card__blurb">
                 No local community where you are? Starting one is a route into the network.
               </p>
@@ -48,22 +54,62 @@ import { communities } from '../data/communities';
   .communities__body {
     margin-top: var(--space-2xl);
     display: grid;
-    grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
-    gap: clamp(var(--space-xl), 5vw, var(--space-3xl));
-    align-items: start;
+    /* Roughly 42/58 — the map is a co-equal element, not an illustration. */
+    grid-template-columns: minmax(0, 42fr) minmax(0, 58fr);
+    gap: clamp(var(--space-xl), 4vw, var(--space-2xl));
+    align-items: stretch;
+  }
+
+  /* Stretching the column lets the closing note settle against the foot of the
+     map panel instead of leaving a void beside it. */
+  .communities__content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .communities__map {
+    margin: 0;
+    padding: var(--space-lg) var(--space-md);
+    background: var(--colour-paper-raised);
+    border: 1px solid var(--colour-rule);
+    border-radius: var(--radius-md);
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  .communities__map-label,
+  .communities__map-caption {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--colour-ink-muted);
+    text-align: center;
+  }
+
+  .communities__map-caption {
+    text-transform: none;
+    letter-spacing: 0.04em;
+    color: var(--colour-ink-soft);
   }
 
   .communities__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
     gap: var(--space-md);
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
+  /* The invitation closes the grid, so it runs full width under the cities. */
+  .communities__grid > li:last-child {
+    grid-column: 1 / -1;
+  }
+
   .communities__note {
-    margin-top: var(--space-lg);
+    margin-top: auto;
+    padding-top: var(--space-lg);
     font-size: var(--text-sm);
     color: var(--colour-ink-muted);
     max-width: 52ch;
@@ -77,7 +123,6 @@ import { communities } from '../data/communities';
     gap: var(--space-2xs);
     padding: var(--space-lg);
     border-radius: var(--radius-md);
-    min-height: 9.5rem;
     height: 100%;
   }
 
@@ -93,8 +138,9 @@ import { communities } from '../data/communities';
     color: var(--colour-ink-muted);
   }
 
-  .community-card__city {
+  .community-card__name {
     font-size: var(--text-xl);
+    text-wrap: balance;
   }
 
   .community-card__blurb {

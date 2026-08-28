@@ -40,8 +40,3 @@ export const communities: readonly Community[] = [
     location: { lat: 55.6, lon: 13.0 },
   },
 ];
-
-export const statusLabels: Record<Community['status'], string> = {
-  'details-pending': 'Details coming soon',
-  published: 'Community page',
-};

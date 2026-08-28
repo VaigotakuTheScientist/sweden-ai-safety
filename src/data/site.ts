@@ -18,10 +18,14 @@ export const site = {
   locale: 'en',
 } as const;
 
+/**
+ * Top navigation. `Learn` is deliberately absent while `/learn` is still a
+ * holding page — the route and its architecture stay, so it only needs adding
+ * back here once there is something to read.
+ */
 export const primaryNav: readonly NavItem[] = [
   { label: 'Communities', href: '/#communities' },
   { label: 'Events', href: '/#events' },
-  { label: 'Learn', href: '/learn' },
   { label: 'About', href: '/about' },
   { label: 'Get involved', href: '/get-involved', emphasis: true },
 ];
