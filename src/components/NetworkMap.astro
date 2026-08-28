@@ -1,0 +1,143 @@
+---
+import { communities } from '../data/communities';
+import { MAP_VIEWBOX, SWEDEN_PATH, project } from '../lib/swedenMap';
+
+/**
+ * The national network motif: a stylised Sweden with one node per community
+ * and thin links between them. Purely decorative — every city it shows is also
+ * listed as text in the community cards beside it — so it is hidden from
+ * assistive technology.
+ */
+const nodes = communities.map((community) => ({
+  id: community.id,
+  city: community.city,
+  ...project(community.location),
+  labelOffset: community.labelOffset,
+}));
+
+// Connect every pair once, so the graphic reads as a network rather than a hub.
+const links = nodes.flatMap((from, index) =>
+  nodes.slice(index + 1).map((to) => ({ from, to })),
+);
+
+/**
+ * Cities closer together than this (in viewBox units) share one label, so
+ * neighbours such as Malmö and Lund stay readable at any map size.
+ */
+const LABEL_CLUSTER_RADIUS = 18;
+
+interface LabelCluster {
+  cities: string[];
+  x: number;
+  y: number;
+}
+
+const clusters = nodes.reduce<LabelCluster[]>((acc, node) => {
+  const near = acc.find(
+    (cluster) => Math.hypot(cluster.x - node.x, cluster.y - node.y) < LABEL_CLUSTER_RADIUS,
+  );
+  if (near) {
+    near.cities.push(node.city);
+    near.x = (near.x + node.x) / 2;
+    near.y = (near.y + node.y) / 2;
+    return acc;
+  }
+  acc.push({ cities: [node.city], x: node.x, y: node.y });
+  return acc;
+}, []);
+
+const labels = clusters.map((cluster) => {
+  const offset = nodes.find((node) => node.city === cluster.cities[0])?.labelOffset;
+  return {
+    text: cluster.cities.join(' · '),
+    x: cluster.x + (offset?.dx ?? 14),
+    y: cluster.y + (offset?.dy ?? 5),
+  };
+});
+---
+
+<div class="network-map">
+  <svg
+    viewBox={`0 0 ${MAP_VIEWBOX.width} ${MAP_VIEWBOX.height}`}
+    role="presentation"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path class="network-map__land" d={SWEDEN_PATH} />
+    {
+      links.map((link) => (
+        <line
+          class="network-map__link"
+          x1={link.from.x}
+          y1={link.from.y}
+          x2={link.to.x}
+          y2={link.to.y}
+        />
+      ))
+    }
+    {
+      nodes.map((node) => (
+        <g>
+          <circle class="network-map__halo" cx={node.x} cy={node.y} r="13" />
+          <circle class="network-map__dot" cx={node.x} cy={node.y} r="6" />
+        </g>
+      ))
+    }
+    {
+      labels.map((label) => (
+        <text class="network-map__label" x={label.x} y={label.y}>
+          {label.text}
+        </text>
+      ))
+    }
+  </svg>
+</div>
+
+<style>
+  .network-map {
+    display: flex;
+    justify-content: center;
+  }
+
+  .network-map svg {
+    height: clamp(22rem, 36vw, 34rem);
+    width: auto;
+    max-width: 100%;
+  }
+
+  .network-map__land {
+    fill: var(--colour-blue-wash);
+    stroke: var(--colour-rule-strong);
+    stroke-width: 2;
+    stroke-linejoin: round;
+  }
+
+  .network-map__link {
+    stroke: var(--colour-blue);
+    stroke-width: 1.5;
+    stroke-dasharray: 5 6;
+    opacity: 0.45;
+  }
+
+  .network-map__halo {
+    fill: var(--colour-blue);
+    opacity: 0.14;
+  }
+
+  .network-map__dot {
+    fill: var(--colour-blue);
+  }
+
+  .network-map__label {
+    font-family: var(--font-mono);
+    font-size: 20px;
+    letter-spacing: 0.02em;
+    fill: var(--colour-ink);
+  }
+
+  @media (max-width: 60rem) {
+    .network-map svg {
+      height: 26rem;
+    }
+  }
+</style>

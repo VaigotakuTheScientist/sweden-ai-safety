@@ -1,0 +1,118 @@
+---
+import { primaryNav, site } from '../data/site';
+import { withBase } from '../lib/paths';
+---
+
+<header class="site-header">
+  <div class="page-shell site-header__inner">
+    <a class="wordmark" href={withBase('/')}>
+      <span class="wordmark__mark" aria-hidden="true"></span>
+      <span class="wordmark__text">{site.wordmark}</span>
+    </a>
+
+    <nav class="site-nav" aria-label="Primary">
+      <ul class="site-nav__list">
+        {
+          primaryNav.map((item) => (
+            <li>
+              <a
+                class:list={['site-nav__link', { 'site-nav__link--cta': item.emphasis }]}
+                href={withBase(item.href)}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    border-bottom: 1px solid var(--colour-rule);
+    background: color-mix(in srgb, var(--colour-paper) 88%, transparent);
+    backdrop-filter: blur(6px);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-lg);
+    flex-wrap: wrap;
+    padding-block: var(--space-md);
+  }
+
+  .wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  /* Three-node fragment of the network motif used across the site. */
+  .wordmark__mark {
+    width: 14px;
+    height: 14px;
+    flex: none;
+    background-image: radial-gradient(
+        circle at 2.5px 2.5px,
+        var(--colour-blue) 2.5px,
+        transparent 2.6px
+      ),
+      radial-gradient(circle at 11.5px 5px, var(--colour-blue) 2.5px, transparent 2.6px),
+      radial-gradient(circle at 5px 11.5px, var(--colour-yellow) 2.5px, transparent 2.6px);
+  }
+
+  .site-nav__list {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.85rem, 2.2vw, 1.75rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    flex-wrap: wrap;
+  }
+
+  .site-nav__link {
+    font-size: var(--text-sm);
+    text-decoration: none;
+    color: var(--colour-ink-soft);
+    padding-block: 0.25rem;
+    border-bottom: 1px solid transparent;
+    transition: color 140ms ease, border-color 140ms ease;
+  }
+
+  .site-nav__link:hover {
+    color: var(--colour-ink);
+    border-bottom-color: var(--colour-yellow);
+  }
+
+  .site-nav__link--cta {
+    color: var(--colour-blue);
+    font-weight: 600;
+  }
+
+  @media (max-width: 46rem) {
+    .site-header {
+      position: static;
+    }
+
+    .site-header__inner {
+      gap: var(--space-sm);
+    }
+
+    .site-nav__list {
+      gap: 0.75rem 1.1rem;
+    }
+  }
+</style>

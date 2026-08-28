@@ -1,0 +1,146 @@
+---
+import { contactChannels, footerNav, site } from '../data/site';
+import { withBase } from '../lib/paths';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="page-shell site-footer__inner">
+    <div class="site-footer__brand">
+      <p class="site-footer__name">{site.wordmark}</p>
+      <p class="site-footer__line">
+        A network of AI safety communities working together across Sweden.
+      </p>
+    </div>
+
+    <nav class="site-footer__nav" aria-label="Footer">
+      <h2 class="site-footer__heading">Site</h2>
+      <ul>
+        {
+          footerNav.map((item) => (
+            <li>
+              <a href={withBase(item.href)}>{item.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="site-footer__nav">
+      <h2 class="site-footer__heading">Elsewhere</h2>
+      <ul>
+        {
+          contactChannels.map((channel) => (
+            <li>
+              {channel.href ? (
+                <a href={channel.href}>{channel.label}</a>
+              ) : (
+                <span class="site-footer__pending">
+                  {channel.label} <span class="site-footer__pending-note">coming soon</span>
+                </span>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-shell site-footer__base">
+    <p>© {year} {site.name}</p>
+    <p>Built in the open.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--colour-rule);
+    background: var(--colour-paper-sunken);
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-lg);
+  }
+
+  .site-footer__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-xl);
+    padding-bottom: var(--space-2xl);
+  }
+
+  .site-footer__name {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .site-footer__line {
+    margin-top: var(--space-xs);
+    color: var(--colour-ink-soft);
+    font-size: var(--text-sm);
+    max-width: 34ch;
+  }
+
+  .site-footer__heading {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--colour-ink-muted);
+    font-weight: 400;
+    margin-bottom: var(--space-sm);
+  }
+
+  .site-footer__nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .site-footer__nav a {
+    font-size: var(--text-sm);
+    color: var(--colour-ink-soft);
+    text-decoration: none;
+  }
+
+  .site-footer__nav a:hover {
+    color: var(--colour-ink);
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+
+  .site-footer__pending {
+    font-size: var(--text-sm);
+    color: var(--colour-ink-muted);
+  }
+
+  .site-footer__pending-note {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    opacity: 0.8;
+  }
+
+  .site-footer__base {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+    border-top: 1px solid var(--colour-rule);
+    padding-top: var(--space-md);
+    font-size: var(--text-xs);
+    color: var(--colour-ink-muted);
+  }
+
+  @media (max-width: 46rem) {
+    .site-footer__inner {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .site-footer__brand {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

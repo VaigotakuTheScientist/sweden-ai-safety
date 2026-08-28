@@ -1,0 +1,60 @@
+---
+import { activities } from '../data/activities';
+---
+
+<section class="section what-we-do" id="what-we-do">
+  <div class="page-shell">
+    <p class="section-eyebrow">What we do</p>
+    <h2 class="section-heading">A national layer for local communities</h2>
+
+    <ol class="what-we-do__list">
+      {
+        activities.map((activity, index) => (
+          <li class="what-we-do__item">
+            <span class="what-we-do__index" aria-hidden="true">
+              {String(index + 1).padStart(2, '0')}
+            </span>
+            <h3 class="what-we-do__title">{activity.title}</h3>
+            <p class="what-we-do__text">{activity.description}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .what-we-do__list {
+    margin-top: var(--space-2xl);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: var(--space-xl);
+    list-style: none;
+    padding: 0;
+    counter-reset: none;
+  }
+
+  .what-we-do__item {
+    border-top: 2px solid var(--colour-ink);
+    padding-top: var(--space-md);
+  }
+
+  .what-we-do__index {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.12em;
+    color: var(--colour-ink-muted);
+  }
+
+  .what-we-do__title {
+    margin-top: var(--space-sm);
+    font-size: var(--text-2xl);
+  }
+
+  .what-we-do__text {
+    margin-top: var(--space-sm);
+    color: var(--colour-ink-soft);
+    max-width: 34ch;
+  }
+</style>

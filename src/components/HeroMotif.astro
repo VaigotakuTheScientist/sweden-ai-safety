@@ -1,0 +1,120 @@
+---
+/**
+ * A quiet network lattice for the hero's right-hand space.
+ *
+ * Nodes are hand-placed rather than generated, and links are derived the same
+ * way the community map derives them — nearest neighbours within a fixed
+ * radius — so the two graphics read as the same visual system. The Sweden
+ * silhouette deliberately stays unique to the communities section; repeating
+ * it here would say the same thing twice.
+ *
+ * Purely decorative, so it is hidden from assistive technology, and it is not
+ * rendered at all below the desktop breakpoint.
+ */
+const VIEWBOX = { width: 420, height: 460 } as const;
+
+const nodes: readonly { x: number; y: number; accent?: 'blue' | 'yellow' }[] = [
+  { x: 42, y: 74 },
+  { x: 138, y: 34 },
+  { x: 236, y: 88, accent: 'blue' },
+  { x: 330, y: 46 },
+  { x: 398, y: 122 },
+  { x: 76, y: 168 },
+  { x: 174, y: 150 },
+  { x: 272, y: 196 },
+  { x: 366, y: 214 },
+  { x: 36, y: 268 },
+  { x: 124, y: 254, accent: 'yellow' },
+  { x: 214, y: 290 },
+  { x: 312, y: 312 },
+  { x: 402, y: 288 },
+  { x: 88, y: 366 },
+  { x: 186, y: 358 },
+  { x: 284, y: 396, accent: 'blue' },
+  { x: 378, y: 380 },
+  { x: 140, y: 448 },
+  { x: 250, y: 452 },
+];
+
+const LINK_RADIUS = 130;
+
+const links = nodes.flatMap((from, index) =>
+  nodes
+    .slice(index + 1)
+    .filter((to) => Math.hypot(to.x - from.x, to.y - from.y) <= LINK_RADIUS)
+    .map((to) => ({ from, to })),
+);
+---
+
+<div class="hero-motif" aria-hidden="true">
+  <svg viewBox={`0 0 ${VIEWBOX.width} ${VIEWBOX.height}`} role="presentation" focusable="false">
+    {
+      links.map((link) => (
+        <line
+          class="hero-motif__link"
+          x1={link.from.x}
+          y1={link.from.y}
+          x2={link.to.x}
+          y2={link.to.y}
+        />
+      ))
+    }
+    {
+      nodes.map((node) => (
+        <circle
+          class:list={[
+            'hero-motif__node',
+            node.accent === 'blue' && 'hero-motif__node--blue',
+            node.accent === 'yellow' && 'hero-motif__node--yellow',
+          ]}
+          cx={node.x}
+          cy={node.y}
+          r={node.accent ? 5 : 3.5}
+        />
+      ))
+    }
+  </svg>
+</div>
+
+<style>
+  .hero-motif {
+    display: none;
+  }
+
+  .hero-motif__link {
+    stroke: var(--colour-blue);
+    stroke-width: 1;
+    opacity: 0.22;
+  }
+
+  .hero-motif__node {
+    fill: var(--colour-blue);
+    opacity: 0.4;
+  }
+
+  .hero-motif__node--blue {
+    opacity: 0.85;
+  }
+
+  .hero-motif__node--yellow {
+    fill: var(--colour-yellow);
+    opacity: 1;
+  }
+
+  @media (min-width: 60rem) {
+    .hero-motif {
+      display: block;
+      justify-self: end;
+      width: 100%;
+      max-width: 26rem;
+      /* Fades where it approaches the headline, so it never competes with type. */
+      -webkit-mask-image: linear-gradient(to right, transparent, #000 45%);
+      mask-image: linear-gradient(to right, transparent, #000 45%);
+    }
+
+    .hero-motif svg {
+      width: 100%;
+      height: auto;
+    }
+  }
+</style>
