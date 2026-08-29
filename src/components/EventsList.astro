@@ -4,12 +4,19 @@ import type { EventEntry } from '../types/content';
 /**
  * Shared event list, used by both the homepage teaser and the full events
  * page so the two never drift out of sync.
+ *
+ * `headingLevel` keeps the document outline correct on each surface: the
+ * homepage teaser sits under a section `h2`, so its event titles are `h3`;
+ * the standalone events page has only the page `h1` above them, so there they
+ * are `h2`. Both levels are styled identically by `.event-row__title`.
  */
 interface Props {
   events: readonly EventEntry[];
+  headingLevel?: 'h2' | 'h3';
 }
 
-const { events } = Astro.props;
+const { events, headingLevel = 'h3' } = Astro.props;
+const Heading = headingLevel;
 
 // Events carry their own UTC offset, but the page is built on a machine that
 // may be in any zone — without an explicit time zone an 18:00 Swedish event
@@ -41,7 +48,7 @@ const hasTime = (value: string) => value.includes('T');
             )}
           </p>
           <div class="event-row__body">
-            <h3 class="event-row__title">{event.title}</h3>
+            <Heading class="event-row__title">{event.title}</Heading>
             <p class="event-row__meta">{[event.city, event.venue].filter(Boolean).join(' · ')}</p>
           </div>
           {event.registrationUrl && (
