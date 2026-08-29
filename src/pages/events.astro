@@ -1,8 +1,51 @@
 ---
-import PlaceholderPage from '../layouts/PlaceholderPage.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import EventsList from '../components/EventsList.astro';
+import { getUpcomingEvents } from '../data/events';
+import { site } from '../data/site';
+import { withBase } from '../lib/paths';
+
+const upcoming = getUpcomingEvents();
+const title = 'Events';
+const intro =
+  'A shared calendar of talks, reading groups, workshops and socials from communities across the network.';
 ---
 
-<PlaceholderPage
-  title="Events"
-  intro="A shared calendar of talks, reading groups, workshops and socials from communities across the network."
-/>
+<BaseLayout title={`${title} — ${site.name}`} description={intro}>
+  <section class="section section--flush events-page">
+    <div class="page-shell">
+      <p class="section-eyebrow">Events</p>
+      <h1 class="events-page__heading">{title}</h1>
+      <p class="events-page__intro">{intro}</p>
+
+      <h2 class="visually-hidden">Upcoming events</h2>
+      <EventsList events={upcoming} />
+
+      <a class="link-arrow events-page__back" href={withBase('/')}>
+        <span class="link-arrow__glyph" aria-hidden="true">←</span> Back to the homepage
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .events-page {
+    padding-block: clamp(3rem, 2rem + 6vw, 6rem);
+  }
+
+  .events-page__heading {
+    font-size: var(--text-3xl);
+    max-width: 20ch;
+  }
+
+  .events-page__intro {
+    margin-top: var(--space-lg);
+    font-size: var(--text-lg);
+    color: var(--colour-ink-soft);
+    max-width: var(--measure);
+  }
+
+  .events-page__back {
+    margin-top: var(--space-xl);
+  }
+</style>
