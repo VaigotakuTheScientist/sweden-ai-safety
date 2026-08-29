@@ -1,6 +1,7 @@
 ---
 import { getUpcomingEvents } from '../data/events';
 import { withBase } from '../lib/paths';
+import EventsList from './EventsList.astro';
 
 /**
  * Events across the network.
@@ -11,22 +12,6 @@ import { withBase } from '../lib/paths';
  * placeholder for a real event.
  */
 const upcoming = getUpcomingEvents();
-// Events carry their own UTC offset, but the page is built on a machine that
-// may be in any zone — without an explicit time zone an 18:00 Swedish event
-// renders in the builder's local time. Sweden is a single zone, so pin it.
-const TIME_ZONE = 'Europe/Stockholm';
-const dateFormatter = new Intl.DateTimeFormat('en-GB', {
-  weekday: 'short',
-  day: 'numeric',
-  month: 'short',
-  timeZone: TIME_ZONE,
-});
-const timeFormatter = new Intl.DateTimeFormat('en-GB', {
-  hour: '2-digit',
-  minute: '2-digit',
-  timeZone: TIME_ZONE,
-});
-const hasTime = (value: string) => value.includes('T');
 ---
 
 <section class="section events" id="events">
@@ -45,42 +30,7 @@ const hasTime = (value: string) => value.includes('T');
       }
     </div>
 
-    {
-      upcoming.length > 0 ? (
-        <ul class="events__list">
-          {upcoming.map((event) => (
-            <li class="event-row">
-              <p class="event-row__date">
-                <time datetime={event.start}>
-                  {dateFormatter.format(new Date(event.start))}
-                </time>
-                {hasTime(event.start) && (
-                  <span class="event-row__time">
-                    {timeFormatter.format(new Date(event.start))}
-                  </span>
-                )}
-              </p>
-              <div class="event-row__body">
-                <h3 class="event-row__title">{event.title}</h3>
-                <p class="event-row__meta">
-                  {[event.city, event.venue].filter(Boolean).join(' · ')}
-                </p>
-              </div>
-              {event.registrationUrl && (
-                <a class="link-arrow event-row__cta" href={event.registrationUrl}>
-                  Register <span class="link-arrow__glyph" aria-hidden="true">→</span>
-                </a>
-              )}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p class="events__empty">
-          Nothing confirmed yet. Local communities announce their own talks, reading groups
-          and workshops; a shared calendar opens here as the first dates are set.
-        </p>
-      )
-    }
+    <EventsList events={upcoming} />
   </div>
 </section>
 
@@ -91,74 +41,5 @@ const hasTime = (value: string) => value.includes('T');
     justify-content: space-between;
     gap: var(--space-lg);
     flex-wrap: wrap;
-  }
-
-  .events__list {
-    margin-top: var(--space-2xl);
-    list-style: none;
-    padding: 0;
-    display: grid;
-    gap: 0;
-  }
-
-  .event-row {
-    display: grid;
-    grid-template-columns: 9rem minmax(0, 1fr) auto;
-    gap: var(--space-lg);
-    align-items: baseline;
-    padding-block: var(--space-lg);
-    border-top: 1px solid var(--colour-rule);
-  }
-
-  .event-row:last-child {
-    border-bottom: 1px solid var(--colour-rule);
-  }
-
-  .event-row__date {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    color: var(--colour-ink);
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-  }
-
-  .event-row__time {
-    color: var(--colour-ink-muted);
-    font-size: var(--text-xs);
-  }
-
-  .event-row__title {
-    font-size: var(--text-lg);
-  }
-
-  .event-row__meta {
-    margin-top: var(--space-2xs);
-    font-size: var(--text-sm);
-    color: var(--colour-ink-muted);
-  }
-
-  /* Deliberately quiet: an empty calendar is an absence, not an announcement.
-     The same section renders `.events__list` once real dates exist. */
-  .events__empty {
-    margin-top: var(--space-xl);
-    padding-top: var(--space-md);
-    border-top: 1px solid var(--colour-rule);
-    font-size: var(--text-sm);
-    color: var(--colour-ink-muted);
-    max-width: 58ch;
-  }
-
-  @media (max-width: 46rem) {
-    .event-row {
-      grid-template-columns: 1fr;
-      gap: var(--space-xs);
-    }
-
-    .event-row__date {
-      flex-direction: row;
-      gap: var(--space-sm);
-      align-items: baseline;
-    }
   }
 </style>
